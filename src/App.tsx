@@ -1,5 +1,11 @@
 import React from 'react';
+import './css/App.css';
+import WeatherWidget from "./components/weather-widget/weather-widget";
+import citiesList from './constants/cities-list.js'
 
 export default function App() {
-    return <p>❤️</p>;
+    return <div className='containerWeatherWidget'>
+        <WeatherWidget cities={citiesList} />
+        <div>❤️</div>
+    </div>;
 }

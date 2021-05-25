@@ -1,1 +1,1 @@
-export interface City  {id: number, label: string, lat: number, lon: number};
+export interface City  {id: string, label: string, lat: number, lon: number};
