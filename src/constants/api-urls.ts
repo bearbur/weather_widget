@@ -1,5 +1,5 @@
-const YANDEX_WEATHER_URL = 'https://api.weather.yandex.ru/v2/forecast?';
+const WEATHER_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
 export default {
-    YANDEX_WEATHER_URL
+    WEATHER_URL
 }
