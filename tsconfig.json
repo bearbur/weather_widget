@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "jsx": "preserve",
+    "moduleResolution": "node",
+    "strict": true,
+    "noEmit": true,
+    "allowJs": false,
+    "skipLibCheck": false,
+    "isolatedModules": true,
+    "esModuleInterop": true
+  },
+  "include": [
+    "src"
+  ]
+}
