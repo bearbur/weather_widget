@@ -1,6 +1,6 @@
-body{
-    background-color: rgba(1,1,1,0.1);
-    font-family: "JetBrains Mono Light" , sans-serif;
+body {
+    background-color: rgba(1, 1, 1, 0.1);
+    font-family: 'JetBrains Mono Light', sans-serif;
 }
 
 .containerWeatherWidget {
@@ -12,7 +12,7 @@ body{
     height: 100%;
 }
 
-@media screen and (max-width: 1024px){
+@media screen and (max-width: 1024px) {
     .containerWeatherWidget {
         width: 100vw;
         height: 100vh;

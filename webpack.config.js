@@ -25,7 +25,7 @@ const config = {
             },
             {
                 test: /\.css$/i,
-                use: ["style-loader", "css-loader"],
+                use: ['style-loader', 'css-loader'],
             },
         ],
     },
@@ -39,9 +39,7 @@ const config = {
 
 if (isProd) {
     config.optimization = {
-        minimizer: [
-            new TerserWebpackPlugin(),
-        ],
+        minimizer: [new TerserWebpackPlugin()],
     };
 } else {
     // for more information, see https://webpack.js.org/configuration/dev-server

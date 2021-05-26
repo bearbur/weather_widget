@@ -1,5 +1,4 @@
-.weatherWrapper{
-
+.weatherWrapper {
     min-width: 350px;
     min-height: 850px;
 
@@ -15,8 +14,7 @@
     flex-wrap: wrap;
 }
 
-.cityCardWrapper{
-
+.cityCardWrapper {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -28,7 +26,7 @@
     min-height: 150px;
 }
 
-.cityCard{
+.cityCard {
     display: grid;
     width: 100%;
     min-height: 150px;
@@ -44,12 +42,11 @@
     cursor: pointer;
 }
 
-.cityCard:hover{
-    background: rgba(1,1,1,0.1);
+.cityCard:hover {
+    background: rgba(1, 1, 1, 0.1);
 }
 
-.weatherIcon{
-
+.weatherIcon {
     min-height: 50px;
 
     width: 100%;
@@ -64,18 +61,17 @@
 
     align-self: center;
 
-    grid-column-start:2;
+    grid-column-start: 2;
     grid-column-end: 3;
-    grid-row:1;
+    grid-row: 1;
 }
 
-.weatherIcon{
+.weatherIcon {
     height: auto;
     width: 75px;
 }
 
-.locationLabel{
-
+.locationLabel {
     font-size: 0.75rem;
 
     width: 100%;
@@ -83,8 +79,7 @@
 
     grid-column-start: 1;
     grid-column-end: 4;
-    grid-row:2;
-
+    grid-row: 2;
 
     display: flex;
     flex-direction: column;
@@ -96,28 +91,27 @@
     letter-spacing: 1px;
 
     font-weight: 600;
-
 }
 
-.locationLabelMain{
+.locationLabelMain {
     font-size: 0.6rem;
 
     font-weight: 200;
 }
 
-.weatherDataRow{
-    grid-row:3;
+.weatherDataRow {
+    grid-row: 3;
     justify-self: center;
 
     font-size: 1.1rem;
 }
 
-.locationTemperature{
+.locationTemperature {
     grid-column-start: 1;
     grid-column-end: 2;
 }
 
-.locationWind{
+.locationWind {
     grid-column-start: 2;
     grid-column-end: 3;
 
@@ -129,64 +123,62 @@
     width: 100%;
 }
 
-.windDirection{
+.windDirection {
     font-size: 0.5rem;
 }
 
-.locationPressure{
+.locationPressure {
     grid-column-start: 3;
     grid-column-end: 3;
 }
 
-.weatherDataRowLabels{
-    grid-row:4;
+.weatherDataRowLabels {
+    grid-row: 4;
     justify-self: center;
 
     font-size: 0.5rem;
 }
 
-.loadError{
+.loadError {
     color: red;
     font-weight: 600;
 }
 
 @media screen and (max-width: 1024px) {
-    .weatherWrapper{
+    .weatherWrapper {
         min-width: 99vw;
         min-height: 99vh;
     }
 
-    .cityCardWrapper{
-        min-height:17vh;
-        min-width: 44vw
+    .cityCardWrapper {
+        min-height: 17vh;
+        min-width: 44vw;
     }
 
-    .cityCard{
+    .cityCard {
         width: 100%;
         min-height: 17vh;
     }
 
-    .weatherIcon{
+    .weatherIcon {
         min-height: 12vh;
     }
 
-    .locationLabel{
+    .locationLabel {
         font-size: 1.5rem;
-
     }
-    .locationLabelMain{
+    .locationLabelMain {
         font-size: 1rem;
-
     }
-    .windDirection{
+    .windDirection {
         font-size: 1rem;
     }
 
-    .weatherDataRowLabels{
+    .weatherDataRowLabels {
         font-size: 1rem;
     }
 
-    .weatherDataRow{
+    .weatherDataRow {
         font-size: 1.5rem;
     }
 }
