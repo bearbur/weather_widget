@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {City, CityRequests} from "../../interfaces/weather-list-interfaces";
+import {City, CityRequests, WeatherInfoResponse} from "../../interfaces/weather-list-interfaces";
 import {weatherLoaderEffect} from "../../hooks/weather-loader-effect";
 import CityCard from './location-card/location-card';
 import {crossingLocationFilter} from '../../helpers/weather-location-utils'
@@ -8,13 +8,15 @@ import { requestStates } from '../../constants/request-constants';
 const WeatherWidget = ({cities}: {cities: City[]}) => {
 
     const INITIAL_CITIES : CityRequests[] = [];
+    const INITIAL_LOCATION_MAP : {[key: string]:WeatherInfoResponse} = {};
 
-    const [citiesToRequest, setCitiesToRequest] = useState(INITIAL_CITIES);
+    const [locationsToRequest, setLocationsToRequest] = useState(INITIAL_CITIES);
+    const [locationMapByCityId, setLocationMapByCityId] = useState(INITIAL_LOCATION_MAP);
+
 
     useEffect(()=>{
-        const currentDateMs = new Date().getTime();
 
-        setCitiesToRequest(cities.map(({id,lat,lon,label})=>(
+        setLocationsToRequest(cities.map(({id,lat,lon,label})=>(
             {
                 id,
                 lat,
@@ -28,33 +30,55 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
     },[cities])
 
     const handleProcessing = ({cities}: { cities: CityRequests[] }) => {
-        setCitiesToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...citiesToRequest], requestState: requestStates.processing}))
+        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.processing}))
     }
 
     const handleSuccess = ({cities}: { cities: CityRequests[] }) => {
-        setCitiesToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...citiesToRequest], requestState: requestStates.success}))
+        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.success}))
     }
 
     const handleFailure = ({cities}: { cities: CityRequests[] }) => {
-        setCitiesToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...citiesToRequest], requestState: requestStates.success}))
+        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.success}))
     }
 
     const handleUpdate = ({cities}: { cities: CityRequests[] }) => {
-        setCitiesToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...citiesToRequest], requestState: requestStates.update}))
+        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.update}))
     }
 
-    const handleLocationWeatherInfo = () => {
+    const handleLocationWeatherInfo = ({weatherInfoAsArray}:{weatherInfoAsArray: {[key: string]:WeatherInfoResponse}[]}) => {
+
+        const updatedLocationData : {[locationKey: string]:WeatherInfoResponse} = {};
+
+        for(let locationDataAsObject of weatherInfoAsArray){
+            if(!Object.values(locationDataAsObject)[0]){
+                continue;
+            }
+            updatedLocationData[Object.keys(locationDataAsObject)[0]] =Object.values(locationDataAsObject)[0];
+        }
+
+        setLocationMapByCityId({...locationMapByCityId, ...updatedLocationData})
 
     }
 
-    weatherLoaderEffect(citiesToRequest, handleProcessing, handleSuccess, handleFailure, handleLocationWeatherInfo )
+    weatherLoaderEffect(locationsToRequest, handleProcessing, handleSuccess, handleFailure, handleLocationWeatherInfo )
 
     return <div className='weatherWrapper'>
         {
             cities.map(
                 ({id, label, lat, lon},cityIndex)=>
                     <div key={`cityIndex_${cityIndex}`} className={'cityCardWrapper'}>
-                        <CityCard location={{id, label, lat, lon, tempC: 0, weatherIcon: '', windMs: 0,  pressure: 0}} handleUpdate={handleUpdate} />
+                        <CityCard
+                            location={{
+                                id,
+                                label,
+                                lat,
+                                lon,
+                                tempC: !!locationMapByCityId[id] ? locationMapByCityId[id]['main']['temp'] : 0,
+                                weatherIcon: (!!locationMapByCityId[id] && !!locationMapByCityId[id]['weather'][0]) ? locationMapByCityId[id]['weather'][0]['icon'] : '',
+                                windMs: !!locationMapByCityId[id] ? locationMapByCityId[id]['wind']["speed"] : 0,
+                                pressure: !!locationMapByCityId[id] ?  locationMapByCityId[id]['main']['pressure'] : 0
+                            }}
+                            handleUpdate={handleUpdate} />
                     </div>)
         }
     </div>

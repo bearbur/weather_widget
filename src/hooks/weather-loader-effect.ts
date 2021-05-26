@@ -1,13 +1,14 @@
 import {useEffect} from 'react';
-import {CityRequests} from "../interfaces/weather-list-interfaces";
+import {CityRequests, WeatherInfoResponse} from "../interfaces/weather-list-interfaces";
 import {getWeatherForCity} from "../helpers/request-former";
+import {AxiosResponse} from "axios";
 
 export const weatherLoaderEffect = (
-    citiesForRequest: CityRequests[], 
-    handleProcessing: Function, 
+    citiesForRequest: CityRequests[],
+    handleProcessing: Function,
     handleSuccess: Function,
-     handleFailure: Function, 
-     handleLocationWeatherInfo: Function 
+     handleFailure: Function,
+     handleLocationWeatherInfo: Function
      ) => {
 
     useEffect(()=>{
@@ -23,7 +24,7 @@ export const weatherLoaderEffect = (
 
         handleProcessing({cities: locationsForRequest});
 
-        Promise.all(locationsForRequest.map(({lon, lat})=>getWeatherForCity(lat, lon))).then(resp=>{
+        Promise.all(locationsForRequest.map(({lon, lat})=>getWeatherForCity(lat, lon))).then( (resp: (AxiosResponse<any>[] | {data: WeatherInfoResponse}[])) =>{
             handleSuccess({cities: locationsForRequest.map(el=> (
                 {
                     ...el,
@@ -33,7 +34,7 @@ export const weatherLoaderEffect = (
                     success: true
                 }))
             });
-            handleLocationWeatherInfo({weatherInfo: locationsForRequest.map(({id},locKey)=>({[id]:resp[locKey]}))})
+            handleLocationWeatherInfo({weatherInfoAsArray: locationsForRequest.map(({id},locKey)=>({[id]:!!resp[locKey]['data'] ? resp[locKey]['data'] : null}))})
         }).catch(e=>{
             handleFailure({cities: locationsForRequest.map(el=>({...el, processing: false, error: true}))})
         })

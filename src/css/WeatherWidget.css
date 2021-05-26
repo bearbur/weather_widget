@@ -1,10 +1,10 @@
 .weatherWrapper{
 
     min-width: 350px;
-    min-height: 500px;
+    min-height: 800px;
 
     max-width: 90%;
-    max-height: 500px;
+    max-height: 800px;
 
     display: flex;
 
@@ -25,21 +25,32 @@
     min-width: 49%;
     max-width: 49%;
 
-    min-height: 88px;
-    
-
+    min-height: 150px;
 }
 
 .cityCard{
     display: grid;
     width: 100%;
-    min-height: 35px;
+    min-height: 150px;
     grid-template-columns: repeat(3, 30%);
-    grid-template-rows: 60% 10% 30%;
-    border: 1px solid green;
+    grid-template-rows: 50% 15% 20% 10%;
+
+    border-radius: 5px;
+
+    padding: 2px;
+
+    user-select: none;
+
+    cursor: pointer;
+}
+
+.cityCard:hover{
+    background: rgba(1,1,1,0.1);
 }
 
 .weatherIcon{
+
+    min-height: 50px;
 
     width: 100%;
     height: max-content;
@@ -51,15 +62,22 @@
     justify-content: center;
     align-items: center;
 
-    grid-column-start: 1;
-    grid-column-end: 4;
+    align-self: center;
+
+    grid-column-start:2;
+    grid-column-end: 3;
     grid-row:1;
+}
+
+.weatherIcon{
+    height: auto;
+    width: 75px;
 }
 
 .locationLabel{
 
     width: 100%;
-    height: 100%;
+    height: max-content;
 
     grid-column-start: 1;
     grid-column-end: 4;
@@ -72,12 +90,38 @@
     align-items: center;
 
     text-transform: uppercase;
+
+    font-weight: 100;
+
+}
+
+.weatherDataRow{
+    grid-row:3;
+    justify-self: center;
+
+    font-size: 1.1rem;
 }
 
 .locationTemperature{
-
     grid-column-start: 1;
     grid-column-end: 2;
-    grid-row:3;
-
 }
+
+.locationWind{
+    grid-column-start: 2;
+    grid-column-end: 3;
+}
+
+.locationPressure{
+    grid-column-start: 3;
+    grid-column-end: 3;
+}
+
+.weatherDataRowLabels{
+    grid-row:4;
+    justify-self: center;
+
+    font-size: 0.5rem;
+}
+
+
