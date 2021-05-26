@@ -1,7 +1,7 @@
 .weatherWrapper{
 
     min-width: 350px;
-    min-height: 800px;
+    min-height: 850px;
 
     max-width: 90%;
     max-height: 800px;
@@ -76,6 +76,8 @@
 
 .locationLabel{
 
+    font-size: 0.75rem;
+
     width: 100%;
     height: max-content;
 
@@ -86,13 +88,21 @@
 
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-evenly;
     align-items: center;
 
     text-transform: uppercase;
 
-    font-weight: 100;
+    letter-spacing: 1px;
 
+    font-weight: 600;
+
+}
+
+.locationLabelMain{
+    font-size: 0.6rem;
+
+    font-weight: 200;
 }
 
 .weatherDataRow{
@@ -110,6 +120,17 @@
 .locationWind{
     grid-column-start: 2;
     grid-column-end: 3;
+
+    display: flex;
+    flex-direction: column;
+    justify-self: flex-start;
+    align-items: center;
+
+    width: 100%;
+}
+
+.windDirection{
+    font-size: 0.5rem;
 }
 
 .locationPressure{

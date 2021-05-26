@@ -76,7 +76,9 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
                                 tempC: !!locationMapByCityId[id] ? locationMapByCityId[id]['main']['temp'] : 0,
                                 weatherIcon: (!!locationMapByCityId[id] && !!locationMapByCityId[id]['weather'][0]) ? locationMapByCityId[id]['weather'][0]['icon'] : '',
                                 windMs: !!locationMapByCityId[id] ? locationMapByCityId[id]['wind']["speed"] : 0,
-                                pressure: !!locationMapByCityId[id] ?  locationMapByCityId[id]['main']['pressure'] : 0
+                                windDeg: !!locationMapByCityId[id] ? locationMapByCityId[id]['wind']["deg"] : 0,
+                                pressure: !!locationMapByCityId[id] ?  locationMapByCityId[id]['main']['pressure'] : 0,
+                                weatherMain: (!!locationMapByCityId[id] && !!locationMapByCityId[id]['weather'][0]) ? locationMapByCityId[id]['weather'][0]['main'] : '',
                             }}
                             handleUpdate={handleUpdate} />
                     </div>)
