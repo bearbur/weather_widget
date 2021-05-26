@@ -33,8 +33,8 @@ const citiesList : City[] = [
     },
     {
         id: `city-6`,
-        label: 'Morocco',
-        lat: 31.7917, lon: 7.0926
+        label: 'Mount Everest',
+        lat: 27.986065, lon: 86.922623
     },
     {
         id: `city-7`,

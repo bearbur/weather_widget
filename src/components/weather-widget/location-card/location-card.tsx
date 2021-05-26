@@ -3,11 +3,30 @@ import { CityInfo } from '../../../interfaces/weather-list-interfaces';
 import WeatherIconView from '../weather-icon-view/weather-icon-view';
 import {getWindLabelByDeg} from "../../../helpers/weather-location-utils";
 
+//todo add processing state
+
+//todo add nodata / error state
+
 const LocationCard = ({location,handleUpdate}: {location:CityInfo, handleUpdate: Function}) => {
 
-    const {weatherIcon, label,weatherMain, tempC, windMs, windDeg, pressure} = location;
+    const {weatherIcon, label,weatherMain, tempC, windMs, windDeg, pressure, id, lat, lon} = location;
 
-    return <div className={'cityCard'}>
+    const handleClickOnCard = () => {
+        handleUpdate({
+            cities: [{
+                id,
+                lat,
+                lon,
+                label,
+                processing: false,
+                error: false,
+                lastSync: -1,
+                success: false
+            }]
+        })
+    }
+
+    return <div className={'cityCard'} onClick={handleClickOnCard}>
         <WeatherIconView iconLink={weatherIcon} />
         <div className={'locationLabel'}><span>{label}</span> <span className={'locationLabelMain'}>{weatherMain}</span></div>
         <div className={'weatherDataRow locationTemperature'}><span>{tempC}</span></div>

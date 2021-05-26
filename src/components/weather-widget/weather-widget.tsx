@@ -6,28 +6,10 @@ import {crossingLocationFilter} from '../../helpers/weather-location-utils'
 import { requestStates } from '../../constants/request-constants';
 
 const WeatherWidget = ({cities}: {cities: City[]}) => {
-
     const INITIAL_CITIES : CityRequests[] = [];
     const INITIAL_LOCATION_MAP : {[key: string]:WeatherInfoResponse} = {};
-
     const [locationsToRequest, setLocationsToRequest] = useState(INITIAL_CITIES);
     const [locationMapByCityId, setLocationMapByCityId] = useState(INITIAL_LOCATION_MAP);
-
-
-    useEffect(()=>{
-
-        setLocationsToRequest(cities.map(({id,lat,lon,label})=>(
-            {
-                id,
-                lat,
-                lon,
-                label,
-                processing: false,
-                error: false,
-                lastSync: -1,
-                success: false
-            })));
-    },[cities])
 
     const handleProcessing = ({cities}: { cities: CityRequests[] }) => {
         setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.processing}))
@@ -42,6 +24,9 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
     }
 
     const handleUpdate = ({cities}: { cities: CityRequests[] }) => {
+
+        //todo check before update on last time sync and make filtration
+
         setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.update}))
     }
 
@@ -60,7 +45,24 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
 
     }
 
-    weatherLoaderEffect(locationsToRequest, handleProcessing, handleSuccess, handleFailure, handleLocationWeatherInfo )
+    weatherLoaderEffect(locationsToRequest, handleProcessing, handleSuccess, handleFailure, handleLocationWeatherInfo );
+
+    //todo add auto updater effect with intervals
+
+    useEffect(()=>{
+
+        setLocationsToRequest(cities.map(({id,lat,lon,label})=>(
+            {
+                id,
+                lat,
+                lon,
+                label,
+                processing: false,
+                error: false,
+                lastSync: -1,
+                success: false
+            })));
+    },[cities]);
 
     return <div className='weatherWrapper'>
         {
