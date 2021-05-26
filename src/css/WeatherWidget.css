@@ -145,6 +145,11 @@
     font-size: 0.5rem;
 }
 
+.loadError{
+    color: red;
+    font-weight: 600;
+}
+
 @media screen and (max-width: 1024px) {
     .weatherWrapper{
         min-width: 99vw;

@@ -7,7 +7,7 @@ import {getWindLabelByDeg} from "../../../helpers/weather-location-utils";
 
 //todo add nodata / error state
 
-const LocationCard = ({location,handleUpdate}: {location:CityInfo, handleUpdate: Function}) => {
+const LocationCard = ({location,handleUpdate, errorAtLocationFetch}: {location:CityInfo, handleUpdate: Function, errorAtLocationFetch: boolean}) => {
 
     const {weatherIcon, label,weatherMain, tempC, windMs, windDeg, pressure, id, lat, lon} = location;
 
@@ -26,24 +26,32 @@ const LocationCard = ({location,handleUpdate}: {location:CityInfo, handleUpdate:
         })
     }
 
-    return <div className={'cityCard'} onClick={handleClickOnCard}>
-        <WeatherIconView iconLink={weatherIcon} />
-        <div className={'locationLabel'}><span>{label}</span> <span className={'locationLabelMain'}>{weatherMain}</span></div>
-        <div className={'weatherDataRow locationTemperature'}><span>{tempC}</span></div>
-        <div className={'weatherDataRow locationWind'}>
-            <span>
-                {`${windMs}`}
-            </span>
-            <span className={'windDirection'}>
-                {getWindLabelByDeg(windDeg)}
-            </span>
-        </div>
-        <div className={'weatherDataRow locationPressure'}><span>{pressure}</span></div>
+    const showInfo = !errorAtLocationFetch;
 
-        <div className={'weatherDataRowLabels locationTemperature'}><span>{'Temp, C'}</span></div>
-        <div className={'weatherDataRowLabels locationWind'}><span>{'Wind, m/s'}</span></div>
-        <div className={'weatherDataRowLabels locationPressure'}><span>{'Pressure, hPa'}</span></div>
-    </div>
+    return <div className={'cityCard'} onClick={handleClickOnCard}>
+            {showInfo&&<WeatherIconView iconLink={weatherIcon} />}
+            <div className={'locationLabel'}>
+                <span>{label}</span>
+                {showInfo &&<span className={'locationLabelMain'}>{weatherMain}</span>}
+                {errorAtLocationFetch && <span className={'locationLabelMain loadError'}>{`Error :(`}</span> }
+            </div>
+        {showInfo && <div className={'weatherDataRow locationTemperature'}><span>{tempC}</span></div>}
+        {showInfo && <div className={'weatherDataRow locationWind'}>
+                <span>
+                    {`${windMs}`}
+                </span>
+                <span className={'windDirection'}>
+                    {getWindLabelByDeg(windDeg)}
+                </span>
+            </div>}
+        {showInfo &&   <div className={'weatherDataRow locationPressure'}>
+                <span>{pressure}</span>
+            </div>}
+
+        {showInfo &&   <div className={'weatherDataRowLabels locationTemperature'}><span>{'Temp, C'}</span></div>}
+        {showInfo &&   <div className={'weatherDataRowLabels locationWind'}><span>{'Wind, m/s'}</span></div>}
+        {showInfo &&   <div className={'weatherDataRowLabels locationPressure'}><span>{'Pressure, hPa'}</span></div>}
+        </div>
 }
 
 export default LocationCard;

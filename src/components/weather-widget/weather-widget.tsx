@@ -115,7 +115,9 @@ const WeatherWidget = ({locations}: {locations: City[]}) => {
                                 pressure: !!locationMapByCityId[id] ?  locationMapByCityId[id]['main']['pressure'] : 0,
                                 weatherMain: (!!locationMapByCityId[id] && !!locationMapByCityId[id]['weather'][0]) ? locationMapByCityId[id]['weather'][0]['main'] : '',
                             }}
-                            handleUpdate={handleUpdate} />
+                            handleUpdate={handleUpdate}
+                            errorAtLocationFetch={!!locationsToRequest.find(el=>(el.id===id && el.error))}
+                        />
                     </div>)
         }
     </div>
