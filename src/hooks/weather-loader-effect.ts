@@ -12,6 +12,7 @@ export const weatherLoaderEffect = (
      ) => {
 
     useEffect(()=>{
+
         if(citiesForRequest.length === 0){
             return;
         }

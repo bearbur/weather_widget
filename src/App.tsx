@@ -6,7 +6,7 @@ import citiesList from './constants/cities-list.js'
 
 export default function App() {
     return <div className='containerWeatherWidget'>
-        <WeatherWidget cities={citiesList} />
+        <WeatherWidget locations={citiesList} />
         <div>❤️</div>
     </div>;
 }

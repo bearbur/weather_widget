@@ -1,16 +1,20 @@
 import { requestStates } from "../constants/request-constants"
-import { CityRequests } from "../interfaces/weather-list-interfaces"
+import {City, CityRequests} from "../interfaces/weather-list-interfaces"
 
 export const crossingLocationFilter = ({activeRequestedLocations, requestedLocations, requestState}:
     {activeRequestedLocations: CityRequests[], requestedLocations: CityRequests[], requestState: string})
     : CityRequests[] => {
     return [...requestedLocations].map(el=>{
 
-        if(!!activeRequestedLocations.find(({id})=>(id===el.id))){
+        const activeLocationRequest = activeRequestedLocations.find(({id})=>(id===el.id));
+
+        if(!!activeLocationRequest){
              return {...el,
-                processing: requestState===requestStates.processing ? true : false,
-                error: requestState===requestStates.error ? true : false,
-                success: requestState===requestStates.success ? true : false}
+                processing: requestState === requestStates.update ? false : requestState === requestStates.processing ? true : el.processing,
+                error: requestState === requestStates.update ? false :requestState === requestStates.error ? true : el.error ,
+                success: requestState === requestStates.update ? false :requestState === requestStates.success ? true : el.success,
+                lastSync: requestState === requestStates.success ? activeLocationRequest.lastSync : el.lastSync
+             }
         }
 
         return el
@@ -37,3 +41,17 @@ export const getWindLabelByDeg = (windDeg: number) => {
     }
 
 }
+
+export const convertDataFromLocations = (locations: City[]) =>  [...locations].map(({id,lat,lon,label})=>(
+            {
+                id,
+                lat,
+                lon,
+                label,
+                processing: false,
+                error: false,
+                lastSync: -1,
+                success: false
+            }
+        )
+    );

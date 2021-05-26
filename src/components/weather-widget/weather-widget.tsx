@@ -1,15 +1,21 @@
-import React, {useState, useEffect} from 'react';
+import React, {useEffect, useState, useMemo} from 'react';
 import {City, CityRequests, WeatherInfoResponse} from "../../interfaces/weather-list-interfaces";
 import {weatherLoaderEffect} from "../../hooks/weather-loader-effect";
 import CityCard from './location-card/location-card';
-import {crossingLocationFilter} from '../../helpers/weather-location-utils'
-import { requestStates } from '../../constants/request-constants';
+import {convertDataFromLocations, crossingLocationFilter} from '../../helpers/weather-location-utils'
+import {INTERVAL_CHECK_UPDATE_MS, requestStates, UPDATE_LIMIT_MS} from '../../constants/request-constants';
+import {setInterval} from "timers";
 
-const WeatherWidget = ({cities}: {cities: City[]}) => {
+const WeatherWidget = ({locations}: {locations: City[]}) => {
     const INITIAL_CITIES : CityRequests[] = [];
     const INITIAL_LOCATION_MAP : {[key: string]:WeatherInfoResponse} = {};
+    const INITIAL_MAKE_UPDATE : true | false = false;
+
     const [locationsToRequest, setLocationsToRequest] = useState(INITIAL_CITIES);
     const [locationMapByCityId, setLocationMapByCityId] = useState(INITIAL_LOCATION_MAP);
+    const [makeUpdate, setMakeUpdate] = useState(INITIAL_MAKE_UPDATE);
+
+    const citiesToUpdate = useMemo(()=>({ cities: convertDataFromLocations(locations)}),[locations]);
 
     const handleProcessing = ({cities}: { cities: CityRequests[] }) => {
         setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.processing}))
@@ -23,14 +29,25 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
         setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.success}))
     }
 
-    const handleUpdate = ({cities}: { cities: CityRequests[] }) => {
+    const handleUpdate  = ({cities}: { cities: CityRequests[] })  => {
 
-        //todo check before update on last time sync and make filtration
+        //Current time at update moment at ms
+        const currentTime = new Date().getTime();
 
-        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...cities], requestedLocations: [...locationsToRequest], requestState: requestStates.update}))
+        const citiesFilteredBySyncTimeLimit = [...cities].filter((el)=>{
+            const locationToRequest = [...locationsToRequest].find(({id})=>id === el.id);
+
+            return !(!locationToRequest || (locationToRequest.lastSync < currentTime && locationToRequest.lastSync + UPDATE_LIMIT_MS >= currentTime));
+        });
+
+        if(citiesFilteredBySyncTimeLimit.length === 0) {
+            return;
+        }
+
+        setLocationsToRequest(crossingLocationFilter({activeRequestedLocations: [...citiesFilteredBySyncTimeLimit], requestedLocations: [...locationsToRequest], requestState: requestStates.update}))
     }
 
-    const handleLocationWeatherInfo = ({weatherInfoAsArray}:{weatherInfoAsArray: {[key: string]:WeatherInfoResponse}[]}) => {
+      const handleLocationWeatherInfo = ({weatherInfoAsArray}:{weatherInfoAsArray: {[key: string]:WeatherInfoResponse}[]}) => {
 
         const updatedLocationData : {[locationKey: string]:WeatherInfoResponse} = {};
 
@@ -47,26 +64,42 @@ const WeatherWidget = ({cities}: {cities: City[]}) => {
 
     weatherLoaderEffect(locationsToRequest, handleProcessing, handleSuccess, handleFailure, handleLocationWeatherInfo );
 
-    //todo add auto updater effect with intervals
+    //On mount effect
+    useEffect(()=>{
+
+        const updateOnInterval = () => {
+            setMakeUpdate(true)
+        }
+
+        let intervalCheckOnMount = setInterval(updateOnInterval,INTERVAL_CHECK_UPDATE_MS);
+        return ()=>{
+            clearInterval(intervalCheckOnMount)
+        }
+    },[])
+
+    useEffect(()=>{
+        if(!makeUpdate){
+            return
+        }
+
+        setMakeUpdate(false);
+        handleUpdate(citiesToUpdate);
+
+        //Unmount
+        return ()=>{
+            setMakeUpdate(false);
+        }
+
+    },[makeUpdate])
 
     useEffect(()=>{
 
-        setLocationsToRequest(cities.map(({id,lat,lon,label})=>(
-            {
-                id,
-                lat,
-                lon,
-                label,
-                processing: false,
-                error: false,
-                lastSync: -1,
-                success: false
-            })));
-    },[cities]);
+        setLocationsToRequest(convertDataFromLocations(locations));
+    },[locations]);
 
     return <div className='weatherWrapper'>
         {
-            cities.map(
+            locations.map(
                 ({id, label, lat, lon},cityIndex)=>
                     <div key={`cityIndex_${cityIndex}`} className={'cityCardWrapper'}>
                         <CityCard
