@@ -145,4 +145,43 @@
     font-size: 0.5rem;
 }
 
+@media screen and (max-width: 1024px) {
+    .weatherWrapper{
+        min-width: 99vw;
+        min-height: 99vh;
+    }
 
+    .cityCardWrapper{
+        min-height:17vh;
+        min-width: 44vw
+    }
+
+    .cityCard{
+        width: 100%;
+        min-height: 17vh;
+    }
+
+    .weatherIcon{
+        min-height: 12vh;
+    }
+
+    .locationLabel{
+        font-size: 1.5rem;
+
+    }
+    .locationLabelMain{
+        font-size: 1rem;
+
+    }
+    .windDirection{
+        font-size: 1rem;
+    }
+
+    .weatherDataRowLabels{
+        font-size: 1rem;
+    }
+
+    .weatherDataRow{
+        font-size: 1.5rem;
+    }
+}
